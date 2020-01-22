@@ -1,6 +1,7 @@
 package com.psawesome.socialmultiplication.service;
 
 import com.psawesome.socialmultiplication.domain.Multiplication;
+import com.psawesome.socialmultiplication.domain.MultiplicationResultAttempt;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,5 +22,11 @@ public class MultiplicationServiceImpl implements MultiplicationService {
         int factorA = randomGeneratorService.generateRandomFactor();
         int factorB = randomGeneratorService.generateRandomFactor();
         return new Multiplication(factorA, factorB);
+    }
+
+    @Override
+    public boolean checkAttempt(MultiplicationResultAttempt resultAttempt) {
+        Multiplication multiplication = resultAttempt.getMultiplication();
+        return multiplication.getFactorA() * multiplication.getFactorB() == resultAttempt.getResultAttempt();
     }
 }
