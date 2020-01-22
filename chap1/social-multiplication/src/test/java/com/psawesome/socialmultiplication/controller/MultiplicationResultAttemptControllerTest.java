@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
 
+import static com.psawesome.socialmultiplication.controller.MultiplicationResultAttemptController.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(SpringRunner.class)
 @WebMvcTest
 public class MultiplicationResultAttemptControllerTest {
+
     @MockBean
     private MultiplicationService service;
 
@@ -48,12 +50,12 @@ public class MultiplicationResultAttemptControllerTest {
     }
 
     @Test
-    public void postResultReturnCorrect() throws IOException {
+    public void postResultReturnCorrect() throws Exception {
         genericParameterizedTest(true);
     }
 
     @Test
-    public void postResultReturnNotCorrect() throws IOException {
+    public void postResultReturnNotCorrect() throws Exception {
         genericParameterizedTest(false);
     }
 
