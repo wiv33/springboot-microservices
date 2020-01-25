@@ -12,7 +12,7 @@ function updateMultiplication() {
 }
 
 $(document).ready(() => {
-    updateMultiplication(); Document
+    updateMultiplication();
 
     $("#attempt-form").submit(function (event) {
 
