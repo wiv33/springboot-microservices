@@ -2,7 +2,9 @@ package com.psawesome.socialmultiplication.service;
 
 import com.psawesome.socialmultiplication.domain.Multiplication;
 import com.psawesome.socialmultiplication.domain.MultiplicationResultAttempt;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * package: com.psawesome.socialmultiplication.service
@@ -26,7 +28,13 @@ public class MultiplicationServiceImpl implements MultiplicationService {
 
     @Override
     public boolean checkAttempt(MultiplicationResultAttempt resultAttempt) {
-        Multiplication multiplication = resultAttempt.getMultiplication();
-        return multiplication.getFactorA() * multiplication.getFactorB() == resultAttempt.getResultAttempt();
+
+        Assert.isTrue(!resultAttempt.isCorrect(), "채점한 상태로 보낼 수 없습니다!");
+
+        boolean isCorrect = resultAttempt.getMultiplication().getFactorA() * resultAttempt.getMultiplication().getFactorB() == resultAttempt.getResultAttempt();
+
+        MultiplicationResultAttempt checkedAttempt = new MultiplicationResultAttempt(resultAttempt.getUser(), resultAttempt.getMultiplication(), resultAttempt.getResultAttempt(), isCorrect);
+
+        return isCorrect;
     }
 }
