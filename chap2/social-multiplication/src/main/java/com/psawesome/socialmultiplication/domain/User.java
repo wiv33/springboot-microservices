@@ -5,6 +5,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 /**
  * package: com.psawesome.socialmultiplication.domain
  * author: PS
@@ -14,7 +19,13 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
+@Entity
 public final class User {
+
+    @Id
+    @GeneratedValue
+    @Column("USER_ID")
+    private Long id;
 
     public final String alias;
 
