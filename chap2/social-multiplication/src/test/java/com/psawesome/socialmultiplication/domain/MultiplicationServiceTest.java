@@ -1,19 +1,23 @@
 package com.psawesome.socialmultiplication.domain;
 
+import com.psawesome.socialmultiplication.repository.MultiplicationResultAttemptRepository;
+import com.psawesome.socialmultiplication.repository.UserRepository;
 import com.psawesome.socialmultiplication.service.MultiplicationService;
 import com.psawesome.socialmultiplication.service.MultiplicationServiceImpl;
 import com.psawesome.socialmultiplication.service.RandomGeneratorService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 /**
  * package: com.psawesome.socialmultiplication.domain
@@ -24,16 +28,23 @@ import static org.mockito.BDDMockito.given;
 @RunWith(SpringRunner.class)
 public class MultiplicationServiceTest {
 
-    @MockBean
+    @Mock
     private RandomGeneratorService randomGeneratorService;
 
-    @Autowired
+    @Mock
+    private MultiplicationResultAttemptRepository attemptRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
     private MultiplicationService multiplicationService;
+
+
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        multiplicationService = new MultiplicationServiceImpl(randomGeneratorService);
+        multiplicationService = new MultiplicationServiceImpl(randomGeneratorService, attemptRepository, userRepository);
     }
 
     @Test
@@ -57,11 +68,15 @@ public class MultiplicationServiceTest {
         User user = new User("John");
 
         MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3000, false);
+        MultiplicationResultAttempt verifiedAttempt = new MultiplicationResultAttempt(user, multiplication, 3000, true);
+
+        given(userRepository.findByAlias("john")).willReturn(Optional.empty());
 
         // when
         boolean b = multiplicationService.checkAttempt(attempt);
 
         assertThat(b).isTrue();
+        verify(attemptRepository).save(verifiedAttempt);
     }
 
     @Test
@@ -71,11 +86,13 @@ public class MultiplicationServiceTest {
         User user = new User("John");
 
         MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3001, false);
+        given(userRepository.findByAlias("john")).willReturn(Optional.empty());
 
         // when
         boolean b = multiplicationService.checkAttempt(attempt);
 
         //assert
         assertThat(b).isFalse();
+        verify(attemptRepository).save(attempt);
     }
 }
