@@ -24,7 +24,7 @@ public final class User {
 
     @Id
     @GeneratedValue
-    @Column("USER_ID")
+    @Column(name = "USER_ID")
     private Long id;
 
     public final String alias;

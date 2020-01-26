@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.*;
+
 /**
  * package: com.psawesome.socialmultiplication.domain
  * author: PS
@@ -14,8 +16,18 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
+@Entity
 public class MultiplicationResultAttempt {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "USER_ID")
     private final User user;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "MULTIPLICATION_ID")
     private final Multiplication multiplication;
     private final int resultAttempt;
 
