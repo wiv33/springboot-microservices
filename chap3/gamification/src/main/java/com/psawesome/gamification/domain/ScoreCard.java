@@ -27,19 +27,19 @@ public final class ScoreCard {
 
     @Id
     @GeneratedValue
-    @Column("CARD_ID")
+    @Column(name = "CARD_ID")
     private final Long cardId;
 
-    @Column("USER_ID")
+    @Column(name = "USER_ID")
     private final Long userId;
 
-    @Column("ATTEMPT_ID")
+    @Column(name = "ATTEMPT_ID")
     private final Long attemptId;
 
-    @Column("SCORE_TS")
+    @Column(name = "SCORE_TS")
     private final long scoreTimestamp;
 
-    @Column("SCORE")
+    @Column(name = "SCORE")
     private final int score;
 
     public ScoreCard() {

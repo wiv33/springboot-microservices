@@ -23,7 +23,7 @@ import javax.persistence.*;
 public final class BadgeCard {
     @Id
     @GeneratedValue
-    @Column("BADGE_ID")
+    @Column(name = "BADGE_ID")
     private final Long badgeId;
 
     private final Long userId;
