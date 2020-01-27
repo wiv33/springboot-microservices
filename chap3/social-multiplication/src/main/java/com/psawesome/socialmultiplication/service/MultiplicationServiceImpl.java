@@ -3,6 +3,8 @@ package com.psawesome.socialmultiplication.service;
 import com.psawesome.socialmultiplication.domain.Multiplication;
 import com.psawesome.socialmultiplication.domain.MultiplicationResultAttempt;
 import com.psawesome.socialmultiplication.domain.User;
+import com.psawesome.socialmultiplication.event.EventDispatcher;
+import com.psawesome.socialmultiplication.event.MultiplicationSolvedEvent;
 import com.psawesome.socialmultiplication.repository.MultiplicationResultAttemptRepository;
 import com.psawesome.socialmultiplication.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -23,10 +25,13 @@ public class MultiplicationServiceImpl implements MultiplicationService {
     private UserRepository userRepository;
     private MultiplicationResultAttemptRepository attemptRepository;
 
-    public MultiplicationServiceImpl(RandomGeneratorService randomGeneratorService, MultiplicationResultAttemptRepository attemptRepository, UserRepository userRepository) {
+    private EventDispatcher eventDispatcher;
+
+    public MultiplicationServiceImpl(RandomGeneratorService randomGeneratorService, MultiplicationResultAttemptRepository attemptRepository, UserRepository userRepository, EventDispatcher eventDispatcher) {
         this.randomGeneratorService = randomGeneratorService;
         this.attemptRepository = attemptRepository;
         this.userRepository = userRepository;
+        this.eventDispatcher = eventDispatcher;
     }
 
     @Override
@@ -53,6 +58,14 @@ public class MultiplicationServiceImpl implements MultiplicationService {
 
         // 답안 저장
         attemptRepository.save(checkedAttempt);
+
+        // 이벤트로 결과를 전송
+        eventDispatcher.send(
+                new MultiplicationSolvedEvent(
+                        checkedAttempt.getId(),
+                        checkedAttempt.getUser().getId(),
+                        checkedAttempt.isCorrect()
+                ));
 
         return isCorrect;
     }

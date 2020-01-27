@@ -1,5 +1,6 @@
 package com.psawesome.socialmultiplication.domain;
 
+import com.psawesome.socialmultiplication.event.EventDispatcher;
 import com.psawesome.socialmultiplication.repository.MultiplicationResultAttemptRepository;
 import com.psawesome.socialmultiplication.repository.UserRepository;
 import com.psawesome.socialmultiplication.service.MultiplicationService;
@@ -41,12 +42,13 @@ public class MultiplicationServiceTest {
 
     private MultiplicationService multiplicationService;
 
-
+    @Mock
+    EventDispatcher eventDispatcher;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        multiplicationService = new MultiplicationServiceImpl(randomGeneratorService, attemptRepository, userRepository);
+        multiplicationService = new MultiplicationServiceImpl(randomGeneratorService, attemptRepository, userRepository, eventDispatcher);
     }
 
     @Test
