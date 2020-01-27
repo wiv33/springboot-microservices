@@ -67,7 +67,7 @@ public class MultiplicationServiceTest {
     public void checkCorrectAttemptTest() {
         // given
         Multiplication multiplication = new Multiplication(50, 60);
-        User user = new User("John");
+        User user = new User("john");
 
         MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3000, false);
         MultiplicationResultAttempt verifiedAttempt = new MultiplicationResultAttempt(user, multiplication, 3000, true);
@@ -85,7 +85,7 @@ public class MultiplicationServiceTest {
     public void checkWrongAttemptTest() {
         // given
         Multiplication multiplication = new Multiplication(50, 60);
-        User user = new User("John");
+        User user = new User("john");
 
         MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3001, false);
         given(userRepository.findByAlias("john")).willReturn(Optional.empty());

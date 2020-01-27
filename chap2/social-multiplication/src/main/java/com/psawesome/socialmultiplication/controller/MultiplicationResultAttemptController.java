@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * package: com.psawesome.socialmultiplication.controller
  * author: PS
@@ -27,6 +29,11 @@ public final class MultiplicationResultAttemptController {
         boolean isCorrect = service.checkAttempt(attempt);
         MultiplicationResultAttempt attemptCopy = new MultiplicationResultAttempt(attempt.getUser(), attempt.getMultiplication(), attempt.getResultAttempt(), isCorrect);
         return ResponseEntity.ok(attemptCopy);
+    }
+
+    @GetMapping
+    ResponseEntity<List<MultiplicationResultAttempt>> getStatistics(@RequestParam("alias") String alias) {
+        return ResponseEntity.ok(service.getStateForUser(alias));
     }
 
     @RequiredArgsConstructor
