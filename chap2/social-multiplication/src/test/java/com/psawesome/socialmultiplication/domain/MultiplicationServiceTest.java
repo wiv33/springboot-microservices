@@ -13,6 +13,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,12 +89,15 @@ public class MultiplicationServiceTest {
 
         MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3001, false);
         given(userRepository.findByAlias("john")).willReturn(Optional.empty());
+        MultiplicationResultAttempt attempt1 = new MultiplicationResultAttempt(user, multiplication, 3051, false);
+
+        List<MultiplicationResultAttempt> latestAttempts = Arrays.asList(attempt, attempt1);
+        given(attemptRepository.findTop5ByUserAliasOrderByIdDesc("john")).willReturn(latestAttempts);
 
         // when
-        boolean b = multiplicationService.checkAttempt(attempt);
+        List<MultiplicationResultAttempt> latestAttemptsResult = multiplicationService.getStateForUser("john");
 
         //assert
-        assertThat(b).isFalse();
-        verify(attemptRepository).save(attempt);
+        assertThat(latestAttemptsResult).isEqualTo(latestAttempts);
     }
 }
