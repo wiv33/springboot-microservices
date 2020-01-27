@@ -1,6 +1,7 @@
 package com.psawesome.socialmultiplication.domain;
 
 import com.psawesome.socialmultiplication.event.EventDispatcher;
+import com.psawesome.socialmultiplication.event.MultiplicationSolvedEvent;
 import com.psawesome.socialmultiplication.repository.MultiplicationResultAttemptRepository;
 import com.psawesome.socialmultiplication.repository.UserRepository;
 import com.psawesome.socialmultiplication.service.MultiplicationService;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -73,6 +75,7 @@ public class MultiplicationServiceTest {
 
         MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3000, false);
         MultiplicationResultAttempt verifiedAttempt = new MultiplicationResultAttempt(user, multiplication, 3000, true);
+        MultiplicationSolvedEvent event = new MultiplicationSolvedEvent(attempt.getId(), attempt.getUser().getId(), true);
 
         given(userRepository.findByAlias("john")).willReturn(Optional.empty());
 
@@ -81,6 +84,7 @@ public class MultiplicationServiceTest {
 
         assertThat(b).isTrue();
         verify(attemptRepository).save(verifiedAttempt);
+        verify(eventDispatcher).send(eq(event));
     }
 
     @Test
@@ -92,6 +96,7 @@ public class MultiplicationServiceTest {
         MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3001, false);
         given(userRepository.findByAlias("john")).willReturn(Optional.empty());
         MultiplicationResultAttempt attempt1 = new MultiplicationResultAttempt(user, multiplication, 3051, false);
+        MultiplicationSolvedEvent event = new MultiplicationSolvedEvent(attempt.getId(), attempt.getUser().getId(), false);
 
         List<MultiplicationResultAttempt> latestAttempts = Arrays.asList(attempt, attempt1);
         given(attemptRepository.findTop5ByUserAliasOrderByIdDesc("john")).willReturn(latestAttempts);
@@ -101,5 +106,8 @@ public class MultiplicationServiceTest {
 
         //assert
         assertThat(latestAttemptsResult).isEqualTo(latestAttempts);
+        verify(attemptRepository).save(attempt);
+        verify(eventDispatcher).send(eq(event));
+
     }
 }
