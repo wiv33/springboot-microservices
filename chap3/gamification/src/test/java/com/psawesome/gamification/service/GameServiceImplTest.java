@@ -1,4 +1,5 @@
 package com.psawesome.gamification.service;
+
 import com.psawesome.gamification.client.MultiplicationResultAttemptClient;
 import com.psawesome.gamification.client.dto.MultiplicationResultAttempt;
 import com.psawesome.gamification.domain.Badge;
@@ -94,10 +95,8 @@ public class GameServiceImplTest {
         given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);
 
         // 방금 얻은 점수 카드를 반환
-        ((BiFunction<Long, Long, List<ScoreCard>>) (userId1, scoreCardNumber) -> LongStream.iterate(0L, value -> value++)
-                .limit(scoreCardNumber)
-                .mapToObj(v -> new ScoreCard(userId1, v))
-                .collect(Collectors.toList())).andThen(given(scoreCardRepository.findByUserIdOrderByScoreTimestampDesc(userId))::willReturn)
+        getNScoreCards()
+                .andThen(given(scoreCardRepository.findByUserIdOrderByScoreTimestampDesc(userId))::willReturn)
                 .apply(3L, 10L);
 
         // 첫 번째 정답 배지는 이미 존재
@@ -110,5 +109,40 @@ public class GameServiceImplTest {
         // then
         assertThat(iteration.getScore()).isEqualTo(ScoreCard.DEFAULT_SCORE);
         assertThat(iteration.getBadges()).containsOnly(Badge.BRONZE_MULTIPLICATOR);
+    }
+
+    @Test
+    @Description("행운의 숫자 배지 획득")
+    public void processCorrectAttemptForLuckyNumberBadgeTest() {
+        // given
+        Long userId = 3L;
+        Long attemptId = 33L;
+        int totalScore = 10;
+
+        BadgeCard firstBadge = new BadgeCard(userId, Badge.FIRST_WON);
+        given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);
+        getNScoreCards()
+                .andThen(given(scoreCardRepository.findByUserIdOrderByScoreTimestampDesc(userId))::willReturn)
+                .apply(userId, 1L);
+        given(badgeCardRepository.findByUserIdOrderByBadgeTimestampDesc(userId)).willReturn(Collections.singletonList(firstBadge));
+
+        // 행운의 숫자가 포함된 답안
+        MultiplicationResultAttempt attempt = new MultiplicationResultAttempt("john", 42, 10, 420, true);
+        given(multiplicationClient.retrieveMultiplicationResultAttemptById(attemptId)).willReturn(attempt);
+
+
+        // when
+        GameStats iteration = gameService.newAttemptForUser(userId, attemptId, true);
+
+        // then
+        assertThat(iteration.getScore()).isEqualTo(ScoreCard.DEFAULT_SCORE);
+        assertThat(iteration.getBadges()).containsOnly(Badge.LUCKY_NUMBER);
+    }
+
+    private BiFunction<Long, Long, List<ScoreCard>> getNScoreCards() {
+        return (userId1, scoreCardNumber) -> LongStream.iterate(0L, value -> value++)
+                .limit(scoreCardNumber)
+                .mapToObj(v -> new ScoreCard(userId1, v))
+                .collect(Collectors.toList());
     }
 }
