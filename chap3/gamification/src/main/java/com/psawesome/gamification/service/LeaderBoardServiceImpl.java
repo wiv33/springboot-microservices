@@ -20,6 +20,6 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
 
     @Override
     public List<LeaderBoardRow> getCurrentLeaderBoard() {
-        return null;
+        return scoreCardRepository.findFirst10();
     }
 }
