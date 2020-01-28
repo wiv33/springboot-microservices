@@ -2,6 +2,7 @@ package com.psawesome.gamification.service;
 
 import com.psawesome.gamification.domain.LeaderBoardRow;
 import com.psawesome.gamification.repository.ScoreCardRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * author: PS
  * DATE: 2020-01-29 수요일 06:00
  */
+@Service
 public class LeaderBoardServiceImpl implements LeaderBoardService {
 
     private final ScoreCardRepository scoreCardRepository;
