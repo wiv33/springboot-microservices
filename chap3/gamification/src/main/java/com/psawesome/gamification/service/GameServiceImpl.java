@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * package: com.psawesome.gamification.service
@@ -56,14 +57,23 @@ public class GameServiceImpl implements GameService {
             List<BadgeCard> badgeCards = processForBadges(userId, attemptId);
             return new GameStats(userId, scoreCard.getScore(),
                     badgeCards.stream()
-            .map(BadgeCard::getBadge)
-            .collect(Collectors.toList()));
+                            .map(BadgeCard::getBadge)
+                            .collect(toList()));
         }
         return GameStats.emptyStats(userId);
     }
 
+    @Override
+    public GameStats retrieveStatsForUser(final Long userId) {
+        int score = scoreCardRepository.getTotalScoreForUser(userId);
+        List<BadgeCard> badgeCards = badgeCardRepository.findByUserIdOrderByBadgeTimestampDesc(userId);
+        return new GameStats(userId, score, (badgeCards.stream()
+                .map(BadgeCard::getBadge).collect(toList())));
+    }
+
     /**
      * 조건이 충족될 경우 새 배지를 제공하기 위해 얻은 총 점수와 점수 카드를 확인
+     *
      * @param userId
      * @param attemptId
      * @return
@@ -92,6 +102,7 @@ public class GameServiceImpl implements GameService {
 
     /**
      * 해당 사용자에게 새로운 배지를 부여하는 메서드
+     *
      * @param badge
      * @param userId
      * @return
@@ -106,6 +117,7 @@ public class GameServiceImpl implements GameService {
     /**
      * 배지를 얻기 위한 조건을 넘는지 체크하는 편의성 메서드
      * 조건이 충족되면 사용자에게 배지를 부여
+     *
      * @param badgeCards
      * @param badge
      * @param score

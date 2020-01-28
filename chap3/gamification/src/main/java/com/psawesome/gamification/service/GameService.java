@@ -21,4 +21,12 @@ public interface GameService {
      * @return 새로운 점수와 배지 카드를 포함한 {@link GameStats} 객체
      */
     GameStats newAttemptForUser(final Long userId, final Long attemptId, final boolean correct);
+
+    /**
+     * 특정 사용자의 통계 정보
+     *
+     * @param userId
+     * @return
+     */
+    GameStats retrieveStatsForUser(final Long userId);
 }
