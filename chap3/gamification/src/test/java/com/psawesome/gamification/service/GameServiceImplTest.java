@@ -2,6 +2,7 @@ package com.psawesome.gamification.service;
 import com.psawesome.gamification.client.MultiplicationResultAttemptClient;
 import com.psawesome.gamification.client.dto.MultiplicationResultAttempt;
 import com.psawesome.gamification.domain.Badge;
+import com.psawesome.gamification.domain.BadgeCard;
 import com.psawesome.gamification.domain.GameStats;
 import com.psawesome.gamification.domain.ScoreCard;
 import com.psawesome.gamification.repository.BadgeCardRepository;
@@ -12,7 +13,16 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -73,6 +83,32 @@ public class GameServiceImplTest {
     }
 
     @Test
-    public void name() {
+    @Description("처음 100점을 얻었을 때 브론즈 획득 테스트")
+    public void processCorrectAttemptForScoreBadgeTest() {
+        // given
+        Long userId = 3L;
+        Long attemptId = 33L;
+        int totalScore = 100;
+
+        BadgeCard firstWonBadge = new BadgeCard(userId, Badge.FIRST_WON);
+        given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);
+
+        // 방금 얻은 점수 카드를 반환
+        ((BiFunction<Long, Long, List<ScoreCard>>) (userId1, scoreCardNumber) -> LongStream.iterate(0L, value -> value++)
+                .limit(scoreCardNumber)
+                .mapToObj(v -> new ScoreCard(userId1, v))
+                .collect(Collectors.toList())).andThen(given(scoreCardRepository.findByUserIdOrderByScoreTimestampDesc(userId))::willReturn)
+                .apply(3L, 10L);
+
+        // 첫 번째 정답 배지는 이미 존재
+        given(badgeCardRepository.findByUserIdOrderByBadgeTimestampDesc(userId))
+                .willReturn(Collections.singletonList(firstWonBadge));
+
+        // when
+        GameStats iteration = gameService.newAttemptForUser(userId, attemptId, true);
+
+        // then
+        assertThat(iteration.getScore()).isEqualTo(ScoreCard.DEFAULT_SCORE);
+        assertThat(iteration.getBadges()).containsOnly(Badge.BRONZE_MULTIPLICATOR);
     }
 }
