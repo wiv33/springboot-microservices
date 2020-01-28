@@ -20,5 +20,5 @@ public interface GameService {
      *         답안의 정답 여부
      * @return 새로운 점수와 배지 카드를 포함한 {@link GameStats} 객체
      */
-    GameStats newAttemptForUser(Long userId, Long attemptId, boolean correct);
+    GameStats newAttemptForUser(final Long userId, final Long attemptId, final boolean correct);
 }
