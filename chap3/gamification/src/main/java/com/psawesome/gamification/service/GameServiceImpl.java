@@ -1,13 +1,12 @@
 package com.psawesome.gamification.service;
 
+import com.psawesome.gamification.client.MultiplicationResultAttemptClient;
 import com.psawesome.gamification.domain.GameStats;
 import com.psawesome.gamification.domain.ScoreCard;
 import com.psawesome.gamification.repository.BadgeCardRepository;
 import com.psawesome.gamification.repository.ScoreCardRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.sql.ClientInfoStatus;
 
 /**
  * package: com.psawesome.gamification.service
@@ -20,10 +19,12 @@ public class GameServiceImpl implements GameService {
 
     private ScoreCardRepository scoreCardRepository;
     private BadgeCardRepository badgeCardRepository;
+    private MultiplicationResultAttemptClient multiplicationResultAttemptClient;
 
-    GameServiceImpl(ScoreCardRepository scoreCardRepository, BadgeCardRepository badgeCardRepository) {
+    GameServiceImpl(ScoreCardRepository scoreCardRepository, BadgeCardRepository badgeCardRepository, MultiplicationResultAttemptClient multiplicationResultAttemptClient) {
         this.scoreCardRepository = scoreCardRepository;
         this.badgeCardRepository = badgeCardRepository;
+        this.multiplicationResultAttemptClient = multiplicationResultAttemptClient;
     }
 
     @Override
