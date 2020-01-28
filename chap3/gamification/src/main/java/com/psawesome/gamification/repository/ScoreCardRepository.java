@@ -44,5 +44,5 @@ public interface ScoreCardRepository extends CrudRepository<ScoreCard, Long> {
      *         사용자 ID
      * @return 특정 사용자의 최근순으로 정렬된 ScoreCard 리스트
      */
-    List<ScoreCard> findByUserIdOrOrderByScoreTimestampDesc(final Long userId);
+    List<ScoreCard> findByUserIdOrderByScoreTimestampDesc(final Long userId);
 }

@@ -55,7 +55,7 @@ public class GameServiceImpl implements GameService {
         int totalScore = scoreCardRepository.getTotalScoreForUser(userId);
         log.info("사용자 ID {}의 새로운 점수 {}", userId, totalScore);
 
-        List<ScoreCard> scoreCardList = scoreCardRepository.findByUserIdOrOrderByScoreTimestampDesc(userId);
+        List<ScoreCard> scoreCardList = scoreCardRepository.findByUserIdOrderByScoreTimestampDesc(userId);
         List<BadgeCard> badgeCardList = badgeCardRepository.findByUserIdOrderByBadgeTimestampDesc(userId);
         checkAndGiveBadgeBasedOnScore(badgeCardList, Badge.BRONZE_MULTIPLICATOR, totalScore, 100, userId).ifPresent(badgeCards::add);
         checkAndGiveBadgeBasedOnScore(badgeCardList, Badge.SILVER_MULTIPLICATOR, totalScore, 500, userId).ifPresent(badgeCards::add);

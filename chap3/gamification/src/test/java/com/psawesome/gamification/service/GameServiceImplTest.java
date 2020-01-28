@@ -1,17 +1,18 @@
 package com.psawesome.gamification.service;
 import com.psawesome.gamification.client.MultiplicationResultAttemptClient;
 import com.psawesome.gamification.client.dto.MultiplicationResultAttempt;
+import com.psawesome.gamification.domain.Badge;
+import com.psawesome.gamification.domain.GameStats;
+import com.psawesome.gamification.domain.ScoreCard;
 import com.psawesome.gamification.repository.BadgeCardRepository;
 import com.psawesome.gamification.repository.ScoreCardRepository;
+import jdk.jfr.Description;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -46,5 +47,32 @@ public class GameServiceImplTest {
                 "john_doe", 20, 70, 1400, true);
         given(multiplicationClient.retrieveMultiplicationResultAttemptById(anyLong()))
                 .willReturn(attempt);
+    }
+
+    @Test
+    @Description("처음 올바른 답안을 제출했을 때")
+    public void processFirstCorrectAttemptTest() {
+        // given
+        Long userId = 3L;
+        Long attemptId = 8L;
+        int totalScore = 10;
+
+        ScoreCard scoreCard = new ScoreCard(userId, attemptId);
+        given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);
+        given(scoreCardRepository.findByUserIdOrderByScoreTimestampDesc(userId)).willReturn(Collections.singletonList(scoreCard));
+        given(badgeCardRepository.findByUserIdOrderByBadgeTimestampDesc(userId)).willReturn(Collections.EMPTY_LIST);
+
+
+        // when
+        GameStats iteration = gameService.newAttemptForUser(userId, attemptId, true);
+
+        // then
+        assertThat(iteration.getScore()).isEqualTo(ScoreCard.DEFAULT_SCORE);
+        assertThat(iteration.getBadges()).containsOnly(Badge.FIRST_WON);
+
+    }
+
+    @Test
+    public void name() {
     }
 }
