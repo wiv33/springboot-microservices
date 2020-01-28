@@ -63,6 +63,11 @@ public class GameServiceImpl implements GameService {
         return GameStats.emptyStats(userId);
     }
 
+    /**
+     * 사용자 통계 조회
+     * @param userId
+     * @return
+     */
     @Override
     public GameStats retrieveStatsForUser(final Long userId) {
         int score = scoreCardRepository.getTotalScoreForUser(userId);
