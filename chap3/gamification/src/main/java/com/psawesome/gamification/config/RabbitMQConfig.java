@@ -18,7 +18,7 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
  *
  *  - 구독자는 메시지를 소비하는 큐를 생성해야 한다.
  *  - 해당 메시지는 라우팅 키(현재 app에선 multiplication.solved)를 이용해 익스체인지에 발행된다.
- *      (토픽을 우연하게 교환하는데 도움이 된다.)
+ *      (토픽을 유연하게 교환하는데 도움이 된다.)
  *  - 익스체인지를 통해 전송되는 모든 메시지는 라우팅 키로 태그를 붙이고
  *  - 소비자는 큐를 익스체인지에 바인딩할 때 라우팅
  *      키 또는 패턴(this app => multiplication.*)을 이용해 큐로 전송되는 메시지를 선택한다.
