@@ -1,9 +1,6 @@
 package com.psawesome.gamification.event;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -16,8 +13,13 @@ import java.io.Serializable;
 @Getter
 @ToString
 @EqualsAndHashCode
-public final class MultiplicationSolvedEvent implements Serializable {
+public class MultiplicationSolvedEvent implements Serializable {
+
     private final Long multiplicationResultAttemptId;
     private final Long userId;
     private final boolean correct;
+
+    public MultiplicationSolvedEvent() {
+        this(null, null, false);
+    }
 }

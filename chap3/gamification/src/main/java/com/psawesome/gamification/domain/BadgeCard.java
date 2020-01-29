@@ -29,7 +29,6 @@ public final class BadgeCard {
     private final Long userId;
     private final long badgeTimestamp;
 
-    @Enumerated(EnumType.STRING)
     private final Badge badge;
 
     public BadgeCard() {

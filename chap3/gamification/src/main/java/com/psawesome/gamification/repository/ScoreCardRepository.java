@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * package: com.psawesome.gamification.repository
@@ -25,7 +26,7 @@ public interface ScoreCardRepository extends CrudRepository<ScoreCard, Long> {
     @Query("SELECT SUM(s.score) " +
             "FROM ScoreCard AS s " +
             "WHERE s.userId = :userId GROUP BY s.userId")
-    int getTotalScoreForUser(@Param("userId") final Long userId);
+    Optional<Integer> getTotalScoreForUser(@Param("userId") final Long userId);
 
     /**
      * 사용자와 사용자의 총 점수를 나타내는 {@link LeaderBoardRow} 리스트를 조회

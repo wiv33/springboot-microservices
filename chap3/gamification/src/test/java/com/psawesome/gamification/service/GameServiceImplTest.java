@@ -14,15 +14,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,7 +62,7 @@ public class GameServiceImplTest {
         // given
         Long userId = 3L;
         Long attemptId = 8L;
-        int totalScore = 10;
+        Optional<Integer> totalScore = Optional.of(10);
 
         ScoreCard scoreCard = new ScoreCard(userId, attemptId);
         given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);
@@ -89,7 +85,7 @@ public class GameServiceImplTest {
         // given
         Long userId = 3L;
         Long attemptId = 33L;
-        int totalScore = 100;
+        Optional<Integer> totalScore = Optional.of(100);
 
         BadgeCard firstWonBadge = new BadgeCard(userId, Badge.FIRST_WON);
         given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);
@@ -117,7 +113,7 @@ public class GameServiceImplTest {
         // given
         Long userId = 3L;
         Long attemptId = 33L;
-        int totalScore = 10;
+        Optional<Integer> totalScore = Optional.of(10);
 
         BadgeCard firstBadge = new BadgeCard(userId, Badge.FIRST_WON);
         given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);

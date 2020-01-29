@@ -24,7 +24,7 @@ public class UserStatsController {
     }
 
     @GetMapping
-    private GameStats getStatsForUser(@RequestParam("userId") final Long userId) {
+    public GameStats getStatsForUser(@RequestParam("userId") final Long userId) {
         return gameService.retrieveStatsForUser(userId);
     }
 }

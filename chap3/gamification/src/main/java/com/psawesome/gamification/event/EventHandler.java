@@ -34,5 +34,12 @@ public class EventHandler {
             // 해당 이벤트가 다시 큐로 들어가거나 두 번 처리되지 않도록 예외 발생
             throw new AmqpRejectAndDontRequeueException(e);
         }
+        /*
+            기본적으로 문제가 생겼을 때 해당 이벤트가 반복적으로 큐에 들어가게 됨.
+            로직을 예외처리로 감싸고
+            AmqpRejectAndDontRequeueException을 발생시켜 바로 이벤트 거부 상태로 만듦.
+            데드 레터 익스체인지 (dead letter exchange)를 구성하고 전송 실패 메시지 처리의 방안을 모색해야 함.
+            - 재전송, 로깅, 알람 발생 등
+         */
     }
 }
