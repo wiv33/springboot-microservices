@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
@@ -61,10 +62,10 @@ public class GameServiceImplTest {
         // given
         Long userId = 3L;
         Long attemptId = 8L;
-        int totalScore = 10;
+        Optional<Integer> totalScore = Optional.of(10);
 
         ScoreCard scoreCard = new ScoreCard(userId, attemptId);
-        given(scoreCardRepository.getTotalScoreForUser(userId).orElse(10)).willReturn(totalScore);
+        given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);
         given(scoreCardRepository.findByUserIdOrderByScoreTimestampDesc(userId)).willReturn(Collections.singletonList(scoreCard));
         given(badgeCardRepository.findByUserIdOrderByBadgeTimestampDesc(userId)).willReturn(Collections.EMPTY_LIST);
 
@@ -84,10 +85,10 @@ public class GameServiceImplTest {
         // given
         Long userId = 3L;
         Long attemptId = 33L;
-        int totalScore = 100;
+        Optional<Integer> totalScore = Optional.of(100);
 
         BadgeCard firstWonBadge = new BadgeCard(userId, Badge.FIRST_WON);
-        given(scoreCardRepository.getTotalScoreForUser(userId).orElse(10)).willReturn(totalScore);
+        given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);
 
         // 방금 얻은 점수 카드를 반환
         getNScoreCards()
@@ -112,10 +113,10 @@ public class GameServiceImplTest {
         // given
         Long userId = 3L;
         Long attemptId = 33L;
-        int totalScore = 10;
+        Optional<Integer> totalScore = Optional.of(10);
 
         BadgeCard firstBadge = new BadgeCard(userId, Badge.FIRST_WON);
-        given(scoreCardRepository.getTotalScoreForUser(userId).orElse(10)).willReturn(totalScore);
+        given(scoreCardRepository.getTotalScoreForUser(userId)).willReturn(totalScore);
         getNScoreCards()
                 .andThen(given(scoreCardRepository.findByUserIdOrderByScoreTimestampDesc(userId))::willReturn)
                 .apply(userId, 1L);

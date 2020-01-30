@@ -1,6 +1,7 @@
 package com.psawesome.gamification.service;
 
 import com.psawesome.gamification.client.MultiplicationResultAttemptClient;
+import com.psawesome.gamification.client.dto.MultiplicationResultAttempt;
 import com.psawesome.gamification.domain.Badge;
 import com.psawesome.gamification.domain.BadgeCard;
 import com.psawesome.gamification.domain.GameStats;
@@ -25,14 +26,16 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class GameServiceImpl implements GameService {
 
+    private final int LUCKY_NUMBER = 42;
+
     private ScoreCardRepository scoreCardRepository;
     private BadgeCardRepository badgeCardRepository;
-    private MultiplicationResultAttemptClient multiplicationResultAttemptClient;
+    private MultiplicationResultAttemptClient attemptClient;
 
     GameServiceImpl(ScoreCardRepository scoreCardRepository, BadgeCardRepository badgeCardRepository, MultiplicationResultAttemptClient multiplicationResultAttemptClient) {
         this.scoreCardRepository = scoreCardRepository;
         this.badgeCardRepository = badgeCardRepository;
-        this.multiplicationResultAttemptClient = multiplicationResultAttemptClient;
+        this.attemptClient = multiplicationResultAttemptClient;
     }
 
     /**
@@ -102,6 +105,16 @@ public class GameServiceImpl implements GameService {
             BadgeCard firstWonBadge = giveBadgeToUser(Badge.FIRST_WON, userId);
             badgeCards.add(firstWonBadge);
         }
+
+        // 행운의 숫자 배지
+        MultiplicationResultAttempt attempt = attemptClient.retrieveMultiplicationResultAttemptById(attemptId);
+        if (!containsBadge(badgeCardList, Badge.LUCKY_NUMBER) &&
+                LUCKY_NUMBER == attempt.getMultiplicationFactorA() ||
+                LUCKY_NUMBER == attempt.getMultiplicationFactorB()) {
+            BadgeCard badgeCard = giveBadgeToUser(Badge.LUCKY_NUMBER, userId);
+            badgeCards.add(badgeCard);
+        }
+
         return badgeCards;
     }
 
