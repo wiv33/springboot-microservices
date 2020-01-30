@@ -77,6 +77,6 @@ public class MultiplicationServiceImpl implements MultiplicationService {
 
     @Override
     public MultiplicationResultAttempt getResultById(Long resultId) {
-        return attemptRepository.findById(resultId).orElseThrow(() -> new RuntimeException("사용자가 없습니다."));
+        return attemptRepository.findById(resultId).orElseThrow(() -> new RuntimeException("not found Exception"));
     }
 }
