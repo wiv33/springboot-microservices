@@ -18,4 +18,5 @@ public interface MultiplicationService {
 
     List<MultiplicationResultAttempt> getStateForUser(String userAlias);
 
+    MultiplicationResultAttempt getResultById(Long resultId);
 }

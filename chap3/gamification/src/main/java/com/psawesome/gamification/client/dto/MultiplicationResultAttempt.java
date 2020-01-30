@@ -1,5 +1,7 @@
 package com.psawesome.gamification.client.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.psawesome.gamification.client.MultiplicationResultAttemptDeserializer;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 @ToString
+@JsonDeserialize(using = MultiplicationResultAttemptDeserializer.class)
 public class MultiplicationResultAttempt {
     private final String userAlias;
 
