@@ -21,6 +21,7 @@ public class MultiplicationResultAttemptClientImpl implements MultiplicationResu
         this.multiplicationHost = multiplicationHost;
     }
 
+    // 해당 메서드는 시간차로 인해 100% 안전하지 않다.
     @Override
     public MultiplicationResultAttempt retrieveMultiplicationResultAttemptById(Long multiplicationResultAttemptId) {
         return restTemplate.getForObject(multiplicationHost + "/results/{resultId}", MultiplicationResultAttempt.class, multiplicationResultAttemptId);

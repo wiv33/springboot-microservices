@@ -75,6 +75,7 @@ public class MultiplicationServiceImpl implements MultiplicationService {
         return attemptRepository.findTop5ByUserAliasOrderByIdDesc(userAlias);
     }
 
+    // 해당 메서드는 시간차로 인해 100% 안전하지 않다.
     @Override
     public MultiplicationResultAttempt getResultById(Long resultId) {
         return attemptRepository.findById(resultId).orElseThrow(() -> new RuntimeException("not found Exception [result ID]"));
