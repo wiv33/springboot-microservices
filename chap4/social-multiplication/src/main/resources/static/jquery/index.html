@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+
+    <title>Multiplication</title>
+</head>
+<body>
+<div>
+    <h1>안녕하세요, 소셜 곱셈입니다!</h1>
+    <h2>오늘의 문제:</h2>
+    <h1><span class="multiplication-a"></span> * <span class="multiplication-b"></span> = </h1>
+    <p>
+    <form id="attempt-form">
+        답은? <input type="text" name="result-attempt"><br/>
+        닉네임: <input type="text" name="user-alias"><br/>
+        <input type="submit" value="확인">
+    </form>
+    </p>
+    <h2><span class="result-message"></span></h2>
+    <h2>통계</h2>
+    <table id="stats" style="width:100%">
+        <tr>
+            <th>답안 ID</th>
+            <th>곱셈</th>
+            <th>입력한 값</th>
+            <th>정답?</th>
+        </tr>
+        <tbody id="stats-body"></tbody>
+    </table>
+</div>
+</body>
+<script src="multiplication-client.js"></script>
+</html>
