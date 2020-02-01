@@ -6,34 +6,90 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="gamification-client.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
 
     <title>Multiplication</title>
 </head>
 <body>
-<div>
-    <h1>안녕하세요, 소셜 곱셈입니다!</h1>
-    <h2>오늘의 문제:</h2>
-    <h1><span class="multiplication-a"></span> * <span class="multiplication-b"></span> = </h1>
-    <p>
-    <form id="attempt-form">
-        답은? <input type="text" name="result-attempt"><br/>
-        닉네임: <input type="text" name="user-alias"><br/>
-        <input type="submit" value="확인">
-    </form>
-    </p>
-    <h2><span class="result-message"></span></h2>
-    <h2>통계</h2>
-    <table id="stats" style="width:100%">
-        <tr>
-            <th>답안 ID</th>
-            <th>곱셈</th>
-            <th>입력한 값</th>
-            <th>정답?</th>
-        </tr>
-        <tbody id="stats-body"></tbody>
-    </table>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">안녕하세요, 소셜 곱셈입니다!</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h3 class="text-center">오늘의 문제:</h3>
+            <h1 class="text-center">
+                <span class="multiplication-a"></span> x <span class="multiplication-b"></span>
+            </h1>
+            <p>
+            <form id="attempt-form">
+                <div class="form-group">
+                    <label for="result-attempt">답은?</label>
+                    <input type="text" name="result-attempt" id="result-attempt" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="user-alias">닉네임:</label>
+                    <input type="text" name="user-alias" id="user-alias" class="form-control">
+                </div>
+                <input type="submit" value="확인" class="btn btn-default">
+            </form>
+            </p>
+            <div class="result-message"></div>
+
+            <div id="stats-div" style="display: none;">
+                <h2>통계</h2>
+                <table id="stats" class="table">
+                    <tbody>
+                    <tr>
+                        <td class="info">사용자 ID:</td>
+                        <td id="stats-user-id"></td>
+                    </tr>
+                    <tr>
+                        <td class="info">점수:</td>
+                        <td id="stats-score"></td>
+                    </tr>
+                    <tr>
+                        <td class="info">배지:</td>
+                        <td id="stats-badges"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <h3>리더보드</h3>
+            <table id="leaderboard" class="table">
+                <tr>
+                    <th>사용자 ID</th>
+                    <th>점수</th>
+                </tr>
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+            <div class="text-right">
+                <button id="refresh-leaderboard" class="btn btn-default" type="submit">새로고침</button>
+            </div>
+
+            <div id="results-div" style="display: none;">
+                <h2>최근 답안</h2>
+                <table id="results" class="table">
+                    <tr>
+                        <th>답안 ID</th>
+                        <th>곱셈</th>
+                        <th>입력한 값</th>
+                        <th>정답?</th>
+                    </tr>
+                    <tbody id="results-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
+<script src="js/bootstrap.min.js" async></script>
 <script src="multiplication-client.js"></script>
 </html>
