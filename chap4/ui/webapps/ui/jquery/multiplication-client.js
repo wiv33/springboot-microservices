@@ -1,6 +1,6 @@
 function updateMultiplication() {
     $.ajax({
-        url: "http://localhost:8080/multiplications/random"
+        url: "http://localhost:8080/multiplication/random"
     }).then(function (data) {
         // 폼 비우기
         $("#attempt-form").find("input[name='result-attempt']").val("");
