@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
+    <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <title>안녕하세요, 소셜 곱셈입니다!</title>
+</head>
+<body>
+<div id="root">
+    <h1>안녕하세요, 소셜 곱셈입니다!</h1>
+    <h2>오늘의 문제:</h2>
+    <h1>
+        {{multiplicationA}} * {{multiplicationB}} = {{resultAttempt}}
+    </h1>
+    <p>
+    <form id="attempt-form">
+        답은? <input type="text" name="result-attempt" v-model="resultAttempt"><br>
+        닉네임: <input type="text" name="user-alias" v-model="userAlias"><br>
+        <input type="submit" value="확인" v-on:click.prevent="onResultSubmit">
+    </form>
+    </p>
+    <h2><span class="result-message">{{resultMessage}}</span></h2>
+</div>
+</body>
+<script>
+    const app = new Vue({
+        el: "#root",
+        data: {
+            multiplicationA: 0,
+            multiplicationB: 0,
+            resultAttempt: 0,
+            userAlias: '',
+            resultMessage: ''
+        },
+        mounted() {
+            this.updateMultiplication();
+            this.multiplicationA = 0;
+            this.multiplicationB = 0;
+            this.resultAttempt = 0;
+            this.userAlias = '';
+        },
+        methods: {
+            updateMultiplication() {
+                axios.get("http://localhost:8080/multiplication/random")
+                    .then(data => {
+                        this.multiplicationA = data.data.factorA;
+                        this.multiplicationB = data.data.factorB;
+                    });
+            },
+            onResultSubmit() {
+                const data = {
+                    user: {alias: this.userAlias},
+                    multiplication: {factorA: this.multiplicationA, factorB: this.multiplicationB},
+                    resultAttempt: this.resultAttempt
+                };
+
+                const options = {
+                    url: '/results',
+                    method: 'POST',
+                    data: data,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                };
+
+                axios(options)
+                .then(result => {
+                    this.resultMessage = result.correct ? "정답입니다! 축하드려요!" : "오답입니다! 그래도 포기하지 마세요!";
+                })
+            }
+        }
+    });
+</script>
+</html>
