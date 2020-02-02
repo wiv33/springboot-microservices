@@ -1,3 +1,16 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: gamification
+
+multiplicationHost: http://localhost:8000/api
+
+multiplication:
+  exchange: multiplication_exchange
+  queue: gamification_multiplication_queue
+  solved:
+    key: multiplication.solved
+  anything:
+    routing-key: multiplication.*

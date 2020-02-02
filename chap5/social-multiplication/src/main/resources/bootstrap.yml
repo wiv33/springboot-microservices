@@ -1,3 +1,14 @@
 spring:
   application:
     name: multiplication
+  rabbitmq:
+    host: localhost
+    password: guest
+    username: guest
+    port: 5672
+
+# settings RabbitMQ
+multiplication:
+  exchange: multiplication_exchange
+  solved:
+    key: multiplication.solved
