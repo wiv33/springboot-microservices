@@ -1,4 +1,3 @@
-
 server:
   port: 8000
 
@@ -28,6 +27,4 @@ endpoints:
 ribbon:
   eureka:
     enabled: false
-spring:
-  application:
-    name: zuul-gateway
+
