@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: multiplication
@@ -12,3 +13,6 @@ multiplication:
   exchange: multiplication_exchange
   solved:
     key: multiplication.solved
+
+server:
+  port: 8080
