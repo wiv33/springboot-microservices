@@ -1,5 +1,6 @@
 package com.psawesome.gamification.client;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.psawesome.gamification.client.dto.MultiplicationResultAttempt;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,8 +23,13 @@ public class MultiplicationResultAttemptClientImpl implements MultiplicationResu
     }
 
     // 해당 메서드는 시간차로 인해 100% 안전하지 않다.
+    @HystrixCommand(fallbackMethod = "defaultResult")
     @Override
     public MultiplicationResultAttempt retrieveMultiplicationResultAttemptById(Long multiplicationResultAttemptId) {
         return restTemplate.getForObject(multiplicationHost + "/results/{resultId}", MultiplicationResultAttempt.class, multiplicationResultAttemptId);
+    }
+
+    private MultiplicationResultAttempt defaultResult(final Long multiplicationResultAttemptId) {
+        return new MultiplicationResultAttempt("fakeAlias", 10, 10, 100, true);
     }
 }
